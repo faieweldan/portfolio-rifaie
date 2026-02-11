@@ -44,7 +44,7 @@ export function Footer() {
                 href="mailto:hello@example.com"
                 className="text-accent transition-colors duration-200 hover:text-accent-hover"
               >
-                hello@example.com
+                rifaienazori@gmail.com
               </a>
             </p>
             <div className="flex items-center gap-5">
@@ -62,7 +62,7 @@ export function Footer() {
               ))}
             </div>
             <p className="text-xs text-muted/60">
-              &copy; {new Date().getFullYear()} Your Name. All rights reserved.
+              &copy; {new Date().getFullYear()} Rifaie Wildani Nazori. All rights reserved.
             </p>
           </div>
         </Reveal>

@@ -39,7 +39,7 @@ export function About() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, margin: "-80px" }}
-            className="mb-6 text-3xl font-bold tracking-tight lg:text-4xl"
+            className="mb-6 text-7xl font-bold tracking-tight lg:text-7xl"
           >
             Rifaie Wildani Bin Nazori
           </motion.h1>
@@ -50,30 +50,12 @@ export function About() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, margin: "-80px" }}
-            className="max-w-lg text-base leading-relaxed text-muted"
+            className="max-w-xl text-lg leading-relaxed text-muted lg:text-xl"
           >
-            I care about clean code, thoughtful design, and creating
-            things that genuinely help people. Currently studying
-            Computer Science and exploring the intersection of
-            engineering and design.
+            Bachelor’s student in Computer Engineering at Penn State with a minor in Cybersecurity, 
+            focused on cloud and security engineering, with experience spanning system-level projects 
+            and full-stack application development.
           </motion.p>
-
-          <motion.div
-            custom={3}
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, margin: "-80px" }}
-            className="mt-10"
-          >
-            <a
-              href="/cv.pdf"
-              download
-              className="rounded-full border border-border px-6 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
-            >
-              Download CV
-            </a>
-          </motion.div>
 
           <motion.div
             custom={4}
@@ -84,7 +66,7 @@ export function About() {
             className="mt-8 flex items-center gap-5"
           >
             <SocialLink
-              href="https://github.com"
+              href="https://github.com/faieweldan"
               label="GitHub"
               icon={
                 <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
@@ -93,7 +75,7 @@ export function About() {
               }
             />
             <SocialLink
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/faieweldan/"
               label="LinkedIn"
               icon={
                 <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
@@ -102,7 +84,7 @@ export function About() {
               }
             />
             <SocialLink
-              href="https://instagram.com"
+              href="https://instagram.com/faieweldan"
               label="Instagram"
               icon={
                 <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">

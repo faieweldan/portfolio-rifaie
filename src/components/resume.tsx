@@ -1,7 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
+
+const PdfViewer = dynamic(() => import("./pdf-viewer"), { ssr: false });
 
 export function Resume() {
   return (
@@ -10,13 +13,7 @@ export function Resume() {
         <SectionHeading title="Resume" />
 
         <Reveal>
-          <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-xl shadow-black/5 dark:shadow-black/20">
-            <iframe
-              src="/cv.pdf"
-              title="Resume"
-              className="h-[800px] w-full sm:h-[1000px]"
-            />
-          </div>
+          <PdfViewer />
         </Reveal>
 
         <Reveal delay={0.1}>
