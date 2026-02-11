@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
@@ -16,9 +16,9 @@ const fadeUp = {
   }),
 };
 
-export function Hero() {
+export function About() {
   return (
-    <section className="flex min-h-screen items-center justify-center px-6 pt-14">
+    <section id="about" className="flex min-h-screen items-center justify-center px-6 pt-14">
       <div className="mx-auto grid w-full max-w-5xl items-center gap-12 lg:grid-cols-[1fr_auto] lg:gap-16">
         {/* Text */}
         <div className="order-2 lg:order-1">
@@ -30,7 +30,7 @@ export function Hero() {
             viewport={{ once: false, margin: "-80px" }}
             className="mb-4 text-sm tracking-wide text-accent"
           >
-            Hello, I&apos;m
+            .about
           </motion.p>
 
           <motion.h1
@@ -39,7 +39,7 @@ export function Hero() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, margin: "-80px" }}
-            className="mb-6 text-5xl font-bold tracking-tight lg:text-6xl"
+            className="mb-6 text-3xl font-bold tracking-tight lg:text-4xl"
           >
             Rifaie Wildani Bin Nazori
           </motion.h1>
@@ -50,9 +50,12 @@ export function Hero() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, margin: "-80px" }}
-            className="mb-10 max-w-lg text-xl leading-relaxed text-muted lg:text-2xl"
+            className="max-w-lg text-base leading-relaxed text-muted"
           >
-            A student developer who builds clean, thoughtful digital experiences.
+            I care about clean code, thoughtful design, and creating
+            things that genuinely help people. Currently studying
+            Computer Science and exploring the intersection of
+            engineering and design.
           </motion.p>
 
           <motion.div
@@ -61,26 +64,14 @@ export function Hero() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, margin: "-80px" }}
-            className="mb-8 flex flex-wrap items-center gap-3"
+            className="mt-10"
           >
-            <a
-              href="#projects"
-              className="rounded-full bg-accent px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/20"
-            >
-              View Projects
-            </a>
             <a
               href="/cv.pdf"
               download
               className="rounded-full border border-border px-6 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
             >
               Download CV
-            </a>
-            <a
-              href="#contact"
-              className="rounded-full border border-border px-6 py-2.5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
-            >
-              Contact
             </a>
           </motion.div>
 
@@ -90,7 +81,7 @@ export function Hero() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, margin: "-80px" }}
-            className="flex items-center gap-5"
+            className="mt-8 flex items-center gap-5"
           >
             <SocialLink
               href="https://github.com"
@@ -134,7 +125,7 @@ export function Hero() {
           <div className="relative mx-auto aspect-[3/4] w-64 overflow-hidden rounded-2xl shadow-2xl shadow-black/10 ring-1 ring-border sm:w-72 lg:w-80 dark:shadow-black/30">
             <Image
               src="/profile.jpg"
-              alt="Profile photo"
+              alt="Rifaie Wildani Bin Nazori"
               fill
               className="object-cover"
               priority

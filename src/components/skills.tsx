@@ -6,26 +6,35 @@ import { SectionHeading } from "./section-heading";
 const skillGroups = [
   {
     label: "Languages",
-    items: ["TypeScript", "JavaScript", "Python", "Java"],
+    items: ["TypeScript", "JavaScript", "Python", "C", "HTML"],
   },
   {
-    label: "Frontend",
-    items: ["React", "Next.js", "Tailwind CSS", "Framer Motion"],
+    label: "Frameworks & Libraries",
+    items: ["React", "Next.js", "Tailwind CSS", "Shadcn/ui"],
   },
   {
-    label: "Backend",
-    items: ["Node.js", "Express", "PostgreSQL", "REST APIs"],
+    label: "Security",
+    items: [
+      "Cryptography (RSA, ChaCha20, AES-CCM)",
+      "Buffer overflow exploitation",
+      "Mandatory Access Control",
+      "SRP authentication",
+    ],
+  },
+  {
+    label: "Cloud & Infrastructure",
+    items: ["AWS (S3, VPC)", "Supabase", "Cloud networking", "CIDR planning"],
   },
   {
     label: "Tools",
-    items: ["Git", "Docker", "Figma", "VS Code"],
+    items: ["Git", "GDB", "Linux", "VS Code"],
   },
 ];
 
 export function Skills() {
   return (
     <section id="skills" className="px-6 py-24">
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-3xl">
         <SectionHeading title="Skills" />
         <div className="grid gap-6 sm:grid-cols-2">
           {skillGroups.map((group, i) => (

@@ -35,7 +35,7 @@ const socials = [
 export function Footer() {
   return (
     <footer id="contact" className="px-6 pb-12 pt-24">
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-3xl">
         <Reveal>
           <div className="flex flex-col items-center gap-6 border-t border-border pt-12 text-center">
             <p className="text-sm text-muted">
