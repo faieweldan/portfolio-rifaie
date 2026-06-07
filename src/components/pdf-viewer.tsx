@@ -1,19 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
+import { supabase } from "@/lib/supabase";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+function useResumeUrl() {
+  const [url, setUrl] = useState("/cv.pdf");
+
+  useEffect(() => {
+    async function check() {
+      const { data } = await supabase.storage.from("portfolio").list("resume");
+      if (data && data.some((f) => f.name === "cv.pdf")) {
+        const { data: urlData } = supabase.storage
+          .from("portfolio")
+          .getPublicUrl("resume/cv.pdf");
+        setUrl(urlData.publicUrl);
+      }
+    }
+    check();
+  }, []);
+
+  return url;
+}
+
 export default function PdfViewer() {
   const [numPages, setNumPages] = useState<number>(0);
+  const resumeUrl = useResumeUrl();
 
   return (
     <div className="flex flex-col items-center gap-6">
       <Document
-        file="/cv.pdf"
+        file={resumeUrl}
         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
         className="flex flex-col items-center gap-6"
       >
