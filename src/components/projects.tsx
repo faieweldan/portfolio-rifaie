@@ -1,11 +1,15 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
+import { supabase } from "@/lib/supabase";
 
 const projects = [
   {
     title: "HRMS System",
+    slug: "hrms.jpg",
     description:
       "A full-stack Human Resource Management System built for a small-to-medium business (50–60 employees). Supports attendance tracking, leave management, employee records, and role-based dashboards for HR and employees.",
     tags: [
@@ -21,6 +25,7 @@ const projects = [
   },
   {
     title: "Secure Communication Project",
+    slug: "secure-comm.jpg",
     description:
       "A hands-on cryptography project implementing secure communication using hybrid encryption and authentication mechanisms. Designed around real-world security concepts such as key exchange, encrypted storage, and password security.",
     tags: [
@@ -35,6 +40,7 @@ const projects = [
   },
   {
     title: "x86 Buffer Overflow Exploits",
+    slug: "buffer-overflow.jpg",
     description:
       "Security research project exploring memory corruption vulnerabilities on x86 systems. Includes practical exploitation of buffer overflows to bypass authentication and hijack control flow.",
     tags: [
@@ -49,6 +55,7 @@ const projects = [
   },
   {
     title: "Integrity Access Control System",
+    slug: "integrity-access.jpg",
     description:
       "A reference monitor implemented in C that enforces multiple mandatory integrity protection models. Focuses on enforcing and comparing different integrity policies at the operating system level.",
     tags: [
@@ -63,6 +70,7 @@ const projects = [
   },
   {
     title: "AWS VPC Infrastructure Setup",
+    slug: "aws-vpc.jpg",
     description:
       "Hands-on cloud project building a secure AWS Virtual Private Cloud from scratch. Covers subnet design, routing, internet gateways, and infrastructure configuration via console and CLI.",
     tags: [
@@ -77,6 +85,7 @@ const projects = [
   },
   {
     title: "Hosting a Static Website on AWS S3",
+    slug: "aws-s3.jpg",
     description:
       "A practical cloud project demonstrating how to host and expose a public static website using Amazon S3. Focuses on permissions, public access configuration, and basic cloud hosting concepts.",
     tags: [
@@ -89,34 +98,74 @@ const projects = [
   },
 ];
 
+function useProjectImages() {
+  const [images, setImages] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    async function load() {
+      const { data } = await supabase.storage.from("portfolio").list("projects");
+      if (!data) return;
+      const map: Record<string, string> = {};
+      for (const file of data) {
+        const { data: urlData } = supabase.storage
+          .from("portfolio")
+          .getPublicUrl(`projects/${file.name}`);
+        map[file.name] = urlData.publicUrl;
+      }
+      setImages(map);
+    }
+    load();
+  }, []);
+
+  return images;
+}
+
 export function Projects() {
+  const images = useProjectImages();
+
   return (
     <section id="projects" className="px-6 py-24">
       <div className="mx-auto max-w-3xl">
         <SectionHeading title="Projects" />
         <div className="grid gap-4 sm:grid-cols-2">
-          {projects.map((project, i) => (
-            <Reveal key={project.title} delay={i * 0.1}>
-              <div className="group block rounded-2xl border border-border bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:border-accent/30 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20">
-                <h3 className="mb-2 text-base font-medium group-hover:text-accent transition-colors duration-200">
-                  {project.title}
-                </h3>
-                <p className="mb-4 text-sm leading-relaxed text-muted">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs text-accent"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+          {projects.map((project, i) => {
+            const imageUrl = images[project.slug];
+            return (
+              <Reveal key={project.title} delay={i * 0.1}>
+                <div className="group block rounded-2xl border border-border bg-card transition-all duration-200 hover:-translate-y-1 hover:border-accent/30 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 overflow-hidden">
+                  {imageUrl && (
+                    <div className="relative w-full aspect-video overflow-hidden">
+                      <Image
+                        src={imageUrl}
+                        alt={`${project.title} screenshot`}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <h3 className="mb-2 text-base font-medium group-hover:text-accent transition-colors duration-200">
+                      {project.title}
+                    </h3>
+                    <p className="mb-4 text-sm leading-relaxed text-muted">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs text-accent"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -11,8 +11,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Student developer portfolio",
+  title: "Rifaie Wildani — Portfolio",
+  description: "Computer Engineering graduate & developer focused on cloud, security, and full-stack engineering.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
