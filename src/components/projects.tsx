@@ -28,7 +28,6 @@ const projects = [
     title: "Secure Communication Project",
     slug: "secure-comm.jpg",
     github: "https://github.com/faieweldan/secure-comm-project",
-    report: "/reports/secure-comm-report.pdf",
     description:
       "A hands-on cryptography project implementing secure communication using hybrid encryption and authentication mechanisms. Designed around real-world security concepts such as key exchange, encrypted storage, and password security.",
     tags: [
@@ -45,7 +44,6 @@ const projects = [
     title: "x86 Buffer Overflow Exploits",
     slug: "buffer-overflow.jpg",
     github: "https://github.com/faieweldan/x86-buffer-overflow-exploits",
-    report: "/reports/buffer-overflow-report.pdf",
     description:
       "Security research project exploring memory corruption vulnerabilities on x86 systems. Includes practical exploitation of buffer overflows to bypass authentication and hijack control flow.",
     tags: [
@@ -62,7 +60,6 @@ const projects = [
     title: "Integrity Access Control System",
     slug: "integrity-access.jpg",
     github: "https://github.com/faieweldan/integrity-access-control",
-    report: "/reports/integrity-report.pdf",
     description:
       "A reference monitor implemented in C that enforces multiple mandatory integrity protection models. Focuses on enforcing and comparing different integrity policies at the operating system level.",
     tags: [
@@ -295,21 +292,7 @@ export function Projects() {
                         </svg>
                         GitHub
                       </a>
-                      {"report" in project && (
-                        <a
-                          href={project.report as string}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-accent transition-colors"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                          </svg>
-                          View Report
-                        </a>
-                      )}
-                    </div>
+                                      </div>
                   </div>
                 </div>
               </Reveal>
