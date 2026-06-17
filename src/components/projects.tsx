@@ -99,6 +99,37 @@ const projects = [
       "HTML",
     ],
   },
+  {
+    title: "Acoustic Echolocation System",
+    slug: "acoustic-echolocation.jpg",
+    description:
+      "A signal processing project that estimates wall distance using acoustic echolocation. Plays white noise from a phone, records it on a laptop mic, and calculates the distance based on the delay between the direct and reflected sound.",
+    tags: [
+      "Python",
+      "NumPy",
+      "SciPy",
+      "Matplotlib",
+      "Signal Processing",
+      "Acoustic sensing",
+      "CMPEN 462",
+    ],
+  },
+  {
+    title: "Kubernetes on AWS Backend Deployment",
+    slug: "kubernetes-aws.jpg",
+    description:
+      "A hands-on 4-part project documenting how a backend application moves from source code to a running deployment on a Kubernetes cluster using AWS services. Covers cluster creation, Docker containerization, ECR, EKS, and manifest deployment.",
+    tags: [
+      "AWS",
+      "Kubernetes",
+      "EKS",
+      "Docker",
+      "ECR",
+      "CloudFormation",
+      "eksctl",
+      "kubectl",
+    ],
+  },
 ];
 
 function useProjectImages() {
