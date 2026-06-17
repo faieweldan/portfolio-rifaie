@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 
 const PROJECT_SLUGS = [
+  { label: "Arthroscopy Fluid Bag Monitor (Capstone)", slug: "arthroscopy-fluid.jpg" },
   { label: "HRMS System", slug: "hrms.jpg" },
   { label: "Secure Communication Project", slug: "secure-comm.jpg" },
   { label: "x86 Buffer Overflow Exploits", slug: "buffer-overflow.jpg" },
