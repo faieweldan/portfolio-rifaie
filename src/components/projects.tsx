@@ -12,6 +12,7 @@ const projects = [
     slug: "arthroscopy-fluid.jpg",
     github: "https://github.com/faieweldan/arthroscopy-beta",
     demo: "https://youtu.be/5m5sAgjYoGg?si=VY5aC5tio8t2Lizv",
+    showcase: "https://sites.psu.edu/lfshowcasesp26/2026/04/28/arthroscopy-fluid-bag-management-system/",
     description:
       "Penn State Capstone project. Monitors irrigation fluid bags during arthroscopic surgery and alerts OR staff when bags run low. Two load cells feed weight data via Arduino to a Raspberry Pi 5, which displays live fluid percentage and volume on a touchscreen GUI. Sponsored by surgeons from Hershey Medical Center.",
     tags: [
@@ -321,6 +322,21 @@ export function Projects() {
                             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                           </svg>
                           Demo
+                        </a>
+                      )}
+                      {"showcase" in project && (
+                        <a
+                          href={project.showcase as string}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-accent transition-colors"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                          </svg>
+                          Showcase
                         </a>
                       )}
                     </div>
