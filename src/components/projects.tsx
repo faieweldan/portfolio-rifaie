@@ -145,6 +145,66 @@ const projects = [
       "AI-driven DevOps",
     ],
   },
+  {
+    title: "AWS CI/CD Pipeline",
+    slug: "aws-cicd-pipeline.jpg",
+    description:
+      "A complete CI/CD pipeline for a Java web application built using AWS DevOps services. Covers the full workflow from source code on GitHub through automated build, deployment, and rollback — orchestrated end-to-end with CodePipeline.",
+    tags: [
+      "AWS CodePipeline",
+      "AWS CodeBuild",
+      "AWS CodeDeploy",
+      "AWS CodeArtifact",
+      "CloudFormation",
+      "EC2",
+      "IAM",
+      "CI/CD",
+    ],
+  },
+  {
+    title: "Terraform – S3 Bucket (IaC Beginner Project)",
+    slug: "terraform-s3.jpg",
+    description:
+      "A beginner Infrastructure as Code project using Terraform to provision and manage an AWS S3 bucket. Covers installation, AWS CLI configuration, writing Terraform configuration files, and the full init → plan → apply → destroy lifecycle.",
+    tags: [
+      "Terraform",
+      "AWS S3",
+      "Infrastructure as Code",
+      "AWS CLI",
+      "IAM",
+      "HashiCorp",
+    ],
+  },
+  {
+    title: "GuardDuty Threat Detection (Juice Shop)",
+    slug: "guardduty-juiceshop.jpg",
+    description:
+      "A cloud security project studying how OWASP Juice Shop vulnerabilities (SQL injection, command injection) can be chained to steal EC2 IAM credentials and access S3. Demonstrates how Amazon GuardDuty detects credential exfiltration and S3 malware using behavioral analysis.",
+    tags: [
+      "Amazon GuardDuty",
+      "AWS CloudFormation",
+      "OWASP Juice Shop",
+      "SQL Injection",
+      "Command Injection",
+      "IMDS",
+      "Cloud Security",
+      "Malware Protection",
+    ],
+  },
+  {
+    title: "Encryption with AWS KMS and DynamoDB",
+    slug: "aws-kms-dynamodb.jpg",
+    description:
+      "A hands-on project demonstrating encryption at rest using a Customer Managed KMS Key on a DynamoDB table. Validates that KMS permissions are enforced independently of DynamoDB access — proving that decryption rights must be explicitly granted through the key policy.",
+    tags: [
+      "AWS KMS",
+      "DynamoDB",
+      "Encryption at Rest",
+      "IAM",
+      "Customer Managed Key",
+      "Cloud Security",
+    ],
+  },
 ];
 
 function useProjectImages() {
