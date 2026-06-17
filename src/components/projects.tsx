@@ -130,6 +130,21 @@ const projects = [
       "kubectl",
     ],
   },
+  {
+    title: "Docker MCP + Cursor (Postgres Playground)",
+    slug: "docker-mcp-cursor.jpg",
+    description:
+      "A hands-on exploration of controlling Docker containers through natural language using Cursor's AI chat and a Docker MCP server. Spins up a PostgreSQL container and an Adminer web UI via Docker Compose — all configured through AI prompts instead of manual CLI commands.",
+    tags: [
+      "Docker",
+      "Docker Compose",
+      "PostgreSQL",
+      "MCP",
+      "Cursor AI",
+      "Adminer",
+      "AI-driven DevOps",
+    ],
+  },
 ];
 
 function useProjectImages() {
