@@ -9,6 +9,13 @@ const PROJECT_SLUGS = [
   { label: "Integrity Access Control System", slug: "integrity-access.jpg" },
   { label: "AWS VPC Infrastructure Setup", slug: "aws-vpc.jpg" },
   { label: "Hosting a Static Website on AWS S3", slug: "aws-s3.jpg" },
+  { label: "Acoustic Echolocation System", slug: "acoustic-echolocation.jpg" },
+  { label: "Kubernetes on AWS Backend Deployment", slug: "kubernetes-aws.jpg" },
+  { label: "Docker MCP + Cursor (Postgres Playground)", slug: "docker-mcp-cursor.jpg" },
+  { label: "AWS CI/CD Pipeline", slug: "aws-cicd-pipeline.jpg" },
+  { label: "Terraform – S3 Bucket (IaC Beginner Project)", slug: "terraform-s3.jpg" },
+  { label: "GuardDuty Threat Detection (Juice Shop)", slug: "guardduty-juiceshop.jpg" },
+  { label: "Encryption with AWS KMS and DynamoDB", slug: "aws-kms-dynamodb.jpg" },
 ];
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
