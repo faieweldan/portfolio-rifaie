@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -29,10 +29,22 @@ function useResumeUrl() {
 
 export default function PdfViewer() {
   const [numPages, setNumPages] = useState<number>(0);
+  const [containerWidth, setContainerWidth] = useState<number>(700);
+  const containerRef = useRef<HTMLDivElement>(null);
   const resumeUrl = useResumeUrl();
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0].contentRect.width;
+      setContainerWidth(Math.min(width, 700));
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div ref={containerRef} className="w-full flex flex-col items-center gap-6">
       <Document
         file={resumeUrl}
         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
@@ -45,7 +57,7 @@ export default function PdfViewer() {
           >
             <Page
               pageNumber={i + 1}
-              width={700}
+              width={containerWidth}
               renderTextLayer={false}
               renderAnnotationLayer={false}
             />
