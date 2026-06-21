@@ -5,6 +5,22 @@ import { SectionHeading } from "./section-heading";
 
 const experiences = [
   {
+    role: "Independent Software Consultant",
+    company: "Awie Metal Sdn Bhd",
+    period: "Jun 2026 – Present",
+    location: "Malaysia",
+    description:
+      "Sole developer for a bespoke Human Resource Management System serving a 50–60 employee scrap metal operation. Delivered end-to-end: requirements gathering with non-technical stakeholders, system architecture, full-stack development, and production deployment. The system is live, handling daily HR operations including attendance, payroll, and employee records — replacing manual processes entirely.",
+    skills: [
+      "Full-stack development",
+      "System architecture",
+      "Client engagement",
+      "Production deployment",
+      "Business process digitisation",
+      "Stakeholder communication",
+    ],
+  },
+  {
     role: "AI Integrator Intern",
     company: "NABO / Chairman Sdn. Bhd.",
     period: "May 2025 – Jul 2025",
