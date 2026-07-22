@@ -5,6 +5,22 @@ import { SectionHeading } from "./section-heading";
 
 const experiences = [
   {
+    role: "AI Product Engineer",
+    company: "Cirqle Sdn Bhd",
+    period: "Jul 2026 – Present",
+    location: "Malaysia",
+    description:
+      "Full-time role building AI-driven products, bridging product thinking with hands-on engineering. Responsible for designing, developing, and shipping AI-powered features — from prototyping and model integration to production deployment — while working closely with product and engineering teams to turn AI capabilities into real user value.",
+    skills: [
+      "AI product development",
+      "LLM integration",
+      "Full-stack engineering",
+      "Product thinking",
+      "Cross-functional collaboration",
+      "Production deployment",
+    ],
+  },
+  {
     role: "Independent Software Consultant",
     company: "Awie Metal Sdn Bhd",
     period: "Jun 2026 – Present",

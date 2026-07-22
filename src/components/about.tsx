@@ -52,9 +52,9 @@ export function About() {
             viewport={{ once: false, margin: "-80px" }}
             className="max-w-xl text-lg leading-relaxed text-muted lg:text-xl"
           >
-            Bachelor’s student in Computer Engineering at Penn State with a minor in Cybersecurity, 
-            focused on cloud and security engineering, with experience spanning system-level projects 
-            and full-stack application development.
+            AI Product Engineer at Cirqle Sdn Bhd, and Bachelor’s student in Computer Engineering at
+            Penn State with a minor in Cybersecurity, focused on cloud and security engineering, with
+            experience spanning system-level projects and full-stack application development.
           </motion.p>
 
           <motion.div
