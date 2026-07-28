@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
-import { getProjectImageUrl } from "@/lib/supabase";
+import { getProjectImageUrl, supabase } from "@/lib/supabase";
 
 function GithubIcon() {
   return (
@@ -257,14 +257,60 @@ const projects = [
 
 type Project = (typeof projects)[number];
 
+const withoutExtension = (name: string) =>
+  name.replace(/\.[^.]+$/, "").toLowerCase();
+
+/**
+ * Looks up what is actually in storage and indexes it two ways: by full
+ * filename, and by name without its extension. That way a screenshot saved
+ * as `hrms.png` or `HRMS.jpg` still matches the `hrms.jpg` this page asks
+ * for. If the listing can't be read at all, each row falls back to the
+ * predictable public address for its own slug.
+ */
+function useStoredImages() {
+  const [stored, setStored] = useState<Record<string, string> | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      const { data, error } = await supabase.storage
+        .from("portfolio")
+        .list("projects", { limit: 200 });
+
+      if (cancelled || error || !data) {
+        if (!cancelled) setStored({});
+        return;
+      }
+
+      const map: Record<string, string> = {};
+      for (const file of data) {
+        const { data: urlData } = supabase.storage
+          .from("portfolio")
+          .getPublicUrl(`projects/${file.name}`);
+        map[file.name.toLowerCase()] = urlData.publicUrl;
+        map[withoutExtension(file.name)] = urlData.publicUrl;
+      }
+      setStored(map);
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return stored;
+}
+
 export function Projects() {
+  const stored = useStoredImages();
+
   return (
     <section id="projects" className="px-8 py-11 sm:px-14">
       <SectionHeading title="Selected projects" note="click to open" />
       <div className="flex flex-col">
         {projects.map((project, i) => (
           <Reveal key={project.title} delay={Math.min(i, 4) * 0.02}>
-            <ProjectRow project={project} />
+            <ProjectRow project={project} stored={stored} />
           </Reveal>
         ))}
       </div>
@@ -272,15 +318,26 @@ export function Projects() {
   );
 }
 
-function ProjectRow({ project }: { project: Project }) {
+function ProjectRow({
+  project,
+  stored,
+}: {
+  project: Project;
+  stored: Record<string, string> | null;
+}) {
   const [open, setOpen] = useState(false);
   const [everOpened, setEverOpened] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
   const contentId = `project-${project.slug}`;
 
-  // The URL is derived from the slug rather than listed from storage, so a
-  // missing bucket listing can never hide a project's links.
-  const imageUrl = getProjectImageUrl(project.slug);
+  // Prefer whatever is really in storage (which tolerates a different
+  // extension or capitalisation), then fall back to the predictable address.
+  // Either way the row still opens, so a storage problem can never hide the
+  // project's links.
+  const imageUrl =
+    stored?.[project.slug.toLowerCase()] ??
+    stored?.[withoutExtension(project.slug)] ??
+    getProjectImageUrl(project.slug);
 
   function toggle() {
     setOpen((v) => !v);
@@ -329,12 +386,12 @@ function ProjectRow({ project }: { project: Project }) {
         className="overflow-hidden transition-[max-height,opacity,margin] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
         style={
           open
-            ? { maxHeight: 560, opacity: 1, marginBottom: 19 }
+            ? { maxHeight: 540, opacity: 1, marginBottom: 19 }
             : { maxHeight: 0, opacity: 0, marginBottom: 0 }
         }
       >
         {everOpened && !imageFailed && (
-          <div className="relative aspect-[16/8] w-full overflow-hidden bg-card">
+          <div className="relative aspect-[16/9] max-h-[420px] w-full overflow-hidden bg-card">
             <Image
               src={imageUrl}
               alt={`${project.title} screenshot`}
