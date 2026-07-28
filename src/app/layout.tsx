@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/navbar";
-import { GridLines } from "@/components/grid-lines";
+import { Rail } from "@/components/rail";
 import "./globals.css";
 
 const serif = Source_Serif_4({
@@ -33,9 +32,10 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${serif.variable} ${mono.variable} antialiased`}>
         <ThemeProvider>
-          <GridLines />
-          <Navbar />
-          <div className="relative z-10">{children}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-[clamp(168px,23%,250px)_1fr]">
+            <Rail />
+            <main>{children}</main>
+          </div>
         </ThemeProvider>
       </body>
     </html>
