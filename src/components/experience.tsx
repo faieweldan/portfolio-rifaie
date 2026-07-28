@@ -75,22 +75,28 @@ export function Experience() {
       <div className="flex flex-col">
         {experiences.map((exp, i) => (
           <Reveal key={exp.role} delay={Math.min(i, 4) * 0.02}>
-            <div className="border-b border-border py-4">
-              <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+            <div className="grid gap-x-10 gap-y-2 border-b border-border py-4 sm:grid-cols-[minmax(0,1fr)_minmax(180px,240px)]">
+              <div>
                 <span className="text-[1.08rem] font-semibold tracking-tight">
                   {exp.role}
                   <span className="font-normal text-muted"> · {exp.company}</span>
                 </span>
-                <span className="whitespace-nowrap font-mono text-[0.68rem] tabular-nums text-muted">
-                  {exp.period}
-                </span>
+                <p className="mt-1.5 text-[0.94em] text-muted">
+                  {exp.description}
+                </p>
               </div>
-              <p className="mt-1.5 max-w-[56ch] text-[0.94em] text-muted">
-                {exp.description}
-              </p>
-              <p className="mt-2.5 max-w-[56ch] font-mono text-[0.64rem] tracking-wide text-muted opacity-80">
-                {exp.skills.join(" · ")}
-              </p>
+
+              {/* Dates and skills live in the right-hand column so the wide
+                  side of the page carries information instead of sitting empty. */}
+              <div className="font-mono text-[0.62rem] leading-relaxed tracking-wide text-muted sm:pt-1">
+                <div className="tabular-nums text-foreground">{exp.period}</div>
+                <div className="mt-0.5">{exp.location}</div>
+                <ul className="mt-2.5 flex flex-col gap-0.5">
+                  {exp.skills.map((skill) => (
+                    <li key={skill}>{skill}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </Reveal>
         ))}

@@ -45,7 +45,7 @@ export default function RootLayout({
               page is shorter than the viewport. */}
           <div className="grid min-h-screen grid-cols-1 sm:grid-cols-[clamp(168px,23%,250px)_1fr]">
             <Rail />
-            <main>{children}</main>
+            <main className="min-w-0">{children}</main>
           </div>
         </ThemeProvider>
       </body>
