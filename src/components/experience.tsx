@@ -70,36 +70,30 @@ const experiences = [
 
 export function Experience() {
   return (
-    <section id="experience" className="px-6 py-24">
-      <div className="mx-auto max-w-3xl">
-        <SectionHeading title="Experience" />
-        <div className="space-y-8">
-          {experiences.map((exp, i) => (
-            <Reveal key={exp.role} delay={i * 0.1}>
-              <div className="group relative pl-6 before:absolute before:left-0 before:top-2 before:h-2 before:w-2 before:rounded-full before:bg-accent/40 before:transition-colors before:duration-200 hover:before:bg-accent">
-                <div className="mb-1 flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
-                  <h3 className="text-base font-medium">{exp.role}</h3>
-                  <span className="text-xs text-muted">{exp.period}</span>
-                </div>
-                <p className="mb-1 text-sm text-accent/80">{exp.company}</p>
-                <p className="mb-3 text-xs text-muted">{exp.location}</p>
-                <p className="mb-4 text-sm leading-relaxed text-muted">
-                  {exp.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {exp.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs text-accent"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+    <section id="experience" className="px-8 py-11 sm:px-14">
+      <SectionHeading title="Experience" />
+      <div className="flex flex-col">
+        {experiences.map((exp, i) => (
+          <Reveal key={exp.role} delay={Math.min(i, 8) * 0.06}>
+            <div className="border-b border-border py-4">
+              <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+                <span className="text-[1.08rem] font-semibold tracking-tight">
+                  {exp.role}
+                  <span className="font-normal text-muted"> · {exp.company}</span>
+                </span>
+                <span className="whitespace-nowrap font-mono text-[0.68rem] tabular-nums text-muted">
+                  {exp.period}
+                </span>
               </div>
-            </Reveal>
-          ))}
-        </div>
+              <p className="mt-1.5 max-w-[56ch] text-[0.94em] text-muted">
+                {exp.description}
+              </p>
+              <p className="mt-2.5 font-mono text-[0.64rem] tracking-wide text-muted opacity-80">
+                {exp.skills.join(" · ")}
+              </p>
+            </div>
+          </Reveal>
+        ))}
       </div>
     </section>
   );

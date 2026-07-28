@@ -33,30 +33,21 @@ const skillGroups = [
 
 export function Skills() {
   return (
-    <section id="skills" className="px-6 py-24">
-      <div className="mx-auto max-w-3xl">
-        <SectionHeading title="Skills" />
-        <div className="grid gap-6 sm:grid-cols-2">
-          {skillGroups.map((group, i) => (
-            <Reveal key={group.label} delay={i * 0.08}>
-              <div>
-                <h3 className="mb-3 text-sm font-medium text-accent">
-                  {group.label}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {group.items.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-border px-3 py-1 text-sm text-muted transition-colors duration-200 hover:border-accent/40 hover:text-foreground"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+    <section id="skills" className="px-8 py-11 sm:px-14">
+      <SectionHeading title="Skills" />
+      <div>
+        {skillGroups.map((group, i) => (
+          <Reveal key={group.label} delay={Math.min(i, 8) * 0.06}>
+            <div className="grid grid-cols-1 gap-1 border-b border-border py-2.5 sm:grid-cols-[150px_1fr] sm:gap-5">
+              <span className="pt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.11em] text-muted">
+                {group.label}
+              </span>
+              <span className="text-[0.95em] text-foreground">
+                {group.items.join(", ")}
+              </span>
+            </div>
+          </Reveal>
+        ))}
       </div>
     </section>
   );
