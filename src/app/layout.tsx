@@ -30,9 +30,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        {/* Applies the saved theme before first paint, so there's no flash
+            and nothing to correct once React takes over. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("theme");if(t==="light")document.documentElement.classList.remove("dark")}catch(e){}`,
+          }}
+        />
+      </head>
       <body className={`${serif.variable} ${mono.variable} antialiased`}>
         <ThemeProvider>
-          <div className="grid grid-cols-1 sm:grid-cols-[clamp(168px,23%,250px)_1fr]">
+          {/* min-h-screen keeps the sidebar filling the window even when a
+              page is shorter than the viewport. */}
+          <div className="grid min-h-screen grid-cols-1 sm:grid-cols-[clamp(168px,23%,250px)_1fr]">
             <Rail />
             <main>{children}</main>
           </div>

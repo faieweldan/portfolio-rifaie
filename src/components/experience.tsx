@@ -88,7 +88,7 @@ export function Experience() {
               <p className="mt-1.5 max-w-[56ch] text-[0.94em] text-muted">
                 {exp.description}
               </p>
-              <p className="mt-2.5 font-mono text-[0.64rem] tracking-wide text-muted opacity-80">
+              <p className="mt-2.5 max-w-[56ch] font-mono text-[0.64rem] tracking-wide text-muted opacity-80">
                 {exp.skills.join(" · ")}
               </p>
             </div>
