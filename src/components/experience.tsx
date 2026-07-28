@@ -74,7 +74,7 @@ export function Experience() {
       <SectionHeading title="Experience" />
       <div className="flex flex-col">
         {experiences.map((exp, i) => (
-          <Reveal key={exp.role} delay={Math.min(i, 8) * 0.06}>
+          <Reveal key={exp.role} delay={Math.min(i, 4) * 0.02}>
             <div className="border-b border-border py-4">
               <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline sm:gap-4">
                 <span className="text-[1.08rem] font-semibold tracking-tight">

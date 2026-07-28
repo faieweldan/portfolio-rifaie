@@ -289,7 +289,7 @@ export function Projects() {
       <SectionHeading title="Selected projects" note="click to open" />
       <div className="flex flex-col">
         {projects.map((project, i) => (
-          <Reveal key={project.title} delay={Math.min(i, 8) * 0.06}>
+          <Reveal key={project.title} delay={Math.min(i, 4) * 0.02}>
             <ProjectRow
               project={project}
               imageUrl={images[project.slug]}

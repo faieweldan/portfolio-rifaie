@@ -37,7 +37,7 @@ export function Skills() {
       <SectionHeading title="Skills" />
       <div>
         {skillGroups.map((group, i) => (
-          <Reveal key={group.label} delay={Math.min(i, 8) * 0.06}>
+          <Reveal key={group.label} delay={Math.min(i, 4) * 0.02}>
             <div className="grid grid-cols-1 gap-1 border-b border-border py-2.5 sm:grid-cols-[150px_1fr] sm:gap-5">
               <span className="pt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.11em] text-muted">
                 {group.label}

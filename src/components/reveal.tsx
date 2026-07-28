@@ -34,13 +34,15 @@ export function Reveal({
     // Already on screen — leave it be rather than flashing it out and back.
     if (el.getBoundingClientRect().top < window.innerHeight) return;
 
-    const wait = Math.min(delay, 0.5);
+    // Rows scroll into view one at a time, so a per-row delay isn't a
+    // stagger — it's just lag before the text appears. Kept very small.
+    const wait = Math.min(delay, 0.08);
     el.style.opacity = "0";
-    el.style.transform = "translateY(9px)";
+    el.style.transform = "translateY(6px)";
 
     function show() {
       if (!el) return;
-      el.style.transition = `opacity 480ms ${EASE} ${wait}s, transform 480ms ${EASE} ${wait}s`;
+      el.style.transition = `opacity 260ms ${EASE} ${wait}s, transform 260ms ${EASE} ${wait}s`;
       el.style.opacity = "1";
       el.style.transform = "none";
     }
@@ -52,12 +54,14 @@ export function Reveal({
           observer.disconnect();
         }
       },
-      { rootMargin: "0px 0px -8% 0px" }
+      // Start slightly before the row reaches the viewport so it has already
+      // settled by the time it is actually on screen.
+      { rootMargin: "0px 0px 140px 0px" }
     );
     observer.observe(el);
 
     // Safety net: if anything goes wrong, show the content anyway.
-    const failsafe = window.setTimeout(show, 3000);
+    const failsafe = window.setTimeout(show, 2000);
 
     return () => {
       observer.disconnect();
