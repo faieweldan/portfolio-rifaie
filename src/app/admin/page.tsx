@@ -21,6 +21,17 @@ const PROJECT_SLUGS = [
 
 type UploadStatus = "idle" | "uploading" | "success" | "error";
 
+/** Surfaces the server's actual reason rather than a generic failure. */
+async function readError(res: Response) {
+  try {
+    const body = await res.json();
+    if (typeof body?.error === "string") return body.error;
+  } catch {
+    // Non-JSON response (e.g. a crash page) — fall through.
+  }
+  return `Upload failed (HTTP ${res.status}).`;
+}
+
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
@@ -29,9 +40,11 @@ export default function AdminPage() {
   const [selectedProject, setSelectedProject] = useState(PROJECT_SLUGS[0].slug);
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [projectStatus, setProjectStatus] = useState<UploadStatus>("idle");
+  const [projectError, setProjectError] = useState("");
 
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeStatus, setResumeStatus] = useState<UploadStatus>("idle");
+  const [resumeError, setResumeError] = useState("");
 
   const projectInputRef = useRef<HTMLInputElement>(null);
   const resumeInputRef = useRef<HTMLInputElement>(null);
@@ -59,8 +72,11 @@ export default function AdminPage() {
     const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
     setProjectStatus(res.ok ? "success" : "error");
     if (res.ok) {
+      setProjectError("");
       setProjectFile(null);
       if (projectInputRef.current) projectInputRef.current.value = "";
+    } else {
+      setProjectError(await readError(res));
     }
   }
 
@@ -74,8 +90,11 @@ export default function AdminPage() {
     const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
     setResumeStatus(res.ok ? "success" : "error");
     if (res.ok) {
+      setResumeError("");
       setResumeFile(null);
       if (resumeInputRef.current) resumeInputRef.current.value = "";
+    } else {
+      setResumeError(await readError(res));
     }
   }
 
@@ -171,7 +190,7 @@ export default function AdminPage() {
           <p className="text-xs text-green-500">Image uploaded successfully.</p>
         )}
         {projectStatus === "error" && (
-          <p className="text-xs text-red-500">Upload failed. Check your Supabase setup.</p>
+          <p className="text-xs text-red-500">{projectError}</p>
         )}
       </section>
 
@@ -205,7 +224,7 @@ export default function AdminPage() {
           <p className="text-xs text-green-500">Resume uploaded successfully.</p>
         )}
         {resumeStatus === "error" && (
-          <p className="text-xs text-red-500">Upload failed. Check your Supabase setup.</p>
+          <p className="text-xs text-red-500">{resumeError}</p>
         )}
       </section>
     </main>
