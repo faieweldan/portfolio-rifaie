@@ -101,6 +101,15 @@ export function Rail() {
             >
               LinkedIn
             </a>
+            {" · "}
+            <a
+              href="https://instagram.com/faieweldan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-b border-border hover:border-foreground"
+            >
+              Instagram
+            </a>
           </p>
           <ThemeToggle />
         </div>
