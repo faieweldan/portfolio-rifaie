@@ -6,6 +6,24 @@ import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
 import { supabase } from "@/lib/supabase";
 
+function GithubIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z" />
+    </svg>
+  );
+}
+
+function ExternalIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
+}
+
 const projects = [
   {
     title: "Arthroscopy Fluid Bag Monitor",
@@ -236,118 +254,174 @@ const projects = [
   },
 ];
 
+type Project = (typeof projects)[number];
+
 function useProjectImages() {
   const [images, setImages] = useState<Record<string, string>>({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     async function load() {
       const { data } = await supabase.storage.from("portfolio").list("projects");
-      if (!data) return;
       const map: Record<string, string> = {};
-      for (const file of data) {
-        const { data: urlData } = supabase.storage
-          .from("portfolio")
-          .getPublicUrl(`projects/${file.name}`);
-        map[file.name] = urlData.publicUrl;
+      if (data) {
+        for (const file of data) {
+          const { data: urlData } = supabase.storage
+            .from("portfolio")
+            .getPublicUrl(`projects/${file.name}`);
+          map[file.name] = urlData.publicUrl;
+        }
       }
       setImages(map);
+      setLoaded(true);
     }
     load();
   }, []);
 
-  return images;
+  return { images, loaded };
 }
 
 export function Projects() {
-  const images = useProjectImages();
+  const { images, loaded } = useProjectImages();
 
   return (
-    <section id="projects" className="px-6 py-24">
-      <div className="mx-auto max-w-3xl">
-        <SectionHeading title="Projects" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {projects.map((project, i) => {
-            const imageUrl = images[project.slug];
-            return (
-              <Reveal key={project.title} delay={i * 0.1}>
-                <div className="group block rounded-2xl border border-border bg-card transition-all duration-200 hover:-translate-y-1 hover:border-accent/30 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 overflow-hidden">
-                  {imageUrl && (
-                    <div className="relative w-full aspect-video overflow-hidden">
-                      <Image
-                        src={imageUrl}
-                        alt={`${project.title} screenshot`}
-                        fill
-                        unoptimized
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, 50vw"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <h3 className="mb-2 text-base font-medium group-hover:text-accent transition-colors duration-200">
-                      {project.title}
-                    </h3>
-                    <p className="mb-4 text-sm leading-relaxed text-muted">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs text-accent"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="mt-4 flex items-center gap-4">
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-accent transition-colors"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/>
-                        </svg>
-                        GitHub
-                      </a>
-                      {"demo" in project && (
-                        <a
-                          href={project.demo as string}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-accent transition-colors"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                          </svg>
-                          Demo
-                        </a>
-                      )}
-                      {"showcase" in project && (
-                        <a
-                          href={project.showcase as string}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-accent transition-colors"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                            <path d="M2 17l10 5 10-5"/>
-                            <path d="M2 12l10 5 10-5"/>
-                          </svg>
-                          Showcase
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+    <section id="projects" className="px-8 py-11 sm:px-14">
+      <SectionHeading title="Selected projects" note="click to open" />
+      <div className="flex flex-col">
+        {projects.map((project, i) => (
+          <Reveal key={project.title} delay={Math.min(i, 8) * 0.06}>
+            <ProjectRow
+              project={project}
+              imageUrl={images[project.slug]}
+              imagesLoaded={loaded}
+            />
+          </Reveal>
+        ))}
       </div>
     </section>
+  );
+}
+
+function ProjectRow({
+  project,
+  imageUrl,
+  imagesLoaded,
+}: {
+  project: Project;
+  imageUrl: string | undefined;
+  imagesLoaded: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const canExpand = imagesLoaded && Boolean(imageUrl);
+  const contentId = `project-${project.slug}`;
+
+  return (
+    <div className="border-b border-border">
+      {canExpand ? (
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={contentId}
+          onClick={() => setOpen((v) => !v)}
+          className="block w-full py-4 text-left"
+        >
+          <RowHeader project={project} expandable open={open} />
+        </button>
+      ) : (
+        <div className="py-4">
+          <RowHeader project={project} expandable={false} open={false} />
+          {!imagesLoaded && (
+            <div className="mt-3 h-4 w-24 animate-pulse rounded-none bg-border/70" />
+          )}
+        </div>
+      )}
+
+      <div
+        id={contentId}
+        className="overflow-hidden transition-[max-height,opacity,margin] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+        style={
+          open
+            ? { maxHeight: 340, opacity: 1, marginBottom: 19 }
+            : { maxHeight: 0, opacity: 0, marginBottom: 0 }
+        }
+      >
+        {imageUrl && (
+          <div className="relative aspect-[16/8] w-full overflow-hidden bg-card">
+            <Image
+              src={imageUrl}
+              alt={`${project.title} screenshot`}
+              fill
+              unoptimized
+              className="object-cover"
+              sizes="(max-width: 640px) 100vw, 700px"
+            />
+          </div>
+        )}
+        <div className="mt-2.5 flex flex-wrap gap-2">
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wide text-muted transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-foreground hover:text-foreground"
+          >
+            <GithubIcon />
+            GitHub
+          </a>
+          {"demo" in project && (
+            <a
+              href={project.demo as string}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wide text-muted transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-foreground hover:text-foreground"
+            >
+              <ExternalIcon />
+              Demo
+            </a>
+          )}
+          {"showcase" in project && (
+            <a
+              href={project.showcase as string}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wide text-muted transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-foreground hover:text-foreground"
+            >
+              <ExternalIcon />
+              Showcase
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RowHeader({
+  project,
+  expandable,
+  open,
+}: {
+  project: Project;
+  expandable: boolean;
+  open: boolean;
+}) {
+  return (
+    <>
+      <div className="flex items-baseline gap-2">
+        <span className="text-[1.08rem] font-semibold tracking-tight">
+          {project.title}
+        </span>
+        {expandable && (
+          <span className="font-mono text-[0.78em] text-muted">
+            {open ? "–" : "+"}
+          </span>
+        )}
+      </div>
+      <p className="mt-1 max-w-[56ch] text-[0.94em] text-muted">
+        {project.description}
+      </p>
+      <p className="mt-2 font-mono text-[0.64rem] tracking-wide text-muted opacity-80">
+        {project.tags.join(" · ")}
+      </p>
+    </>
   );
 }
