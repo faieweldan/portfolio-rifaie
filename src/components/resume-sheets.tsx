@@ -8,10 +8,12 @@ const THUMB_WIDTH = 330; // css px, sheet grows up to this before wrapping
 type Rect = { left: number; top: number; width: number; height: number };
 
 async function getPdfjs() {
-  const pdfjs = await import("pdfjs-dist");
+  // The legacy build is the bundler-friendly one; the modern build fails at
+  // module evaluation under Turbopack.
+  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
   // Self-hosted worker — bundled by Next, no third-party CDN in the path.
   pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    "pdfjs-dist/build/pdf.worker.min.mjs",
+    "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
     import.meta.url
   ).toString();
   return pdfjs;
@@ -41,6 +43,7 @@ async function renderPageToCanvas(
 
 export function ResumeSheets({ pdfUrl }: { pdfUrl: string }) {
   const [numPages, setNumPages] = useState(0);
+  const [failed, setFailed] = useState(false);
   const [dealt, setDealt] = useState(false);
   const [openPage, setOpenPage] = useState<number | null>(null);
   const [fromRect, setFromRect] = useState<Rect | null>(null);
@@ -57,11 +60,18 @@ export function ResumeSheets({ pdfUrl }: { pdfUrl: string }) {
   useEffect(() => {
     let cancelled = false;
     async function load() {
-      const pdfjs = await getPdfjs();
-      const doc = await pdfjs.getDocument({ url: pdfUrl }).promise;
-      if (cancelled) return;
-      docRef.current = doc;
-      setNumPages(doc.numPages);
+      try {
+        const pdfjs = await getPdfjs();
+        const doc = await pdfjs.getDocument({ url: pdfUrl }).promise;
+        if (cancelled) return;
+        docRef.current = doc;
+        setNumPages(doc.numPages);
+        setFailed(false);
+      } catch {
+        // A preview is a nicety; the download link is the real thing. Never
+        // leave the section as an empty gap if rendering can't happen.
+        if (!cancelled) setFailed(true);
+      }
     }
     load();
     return () => {
@@ -174,6 +184,14 @@ export function ResumeSheets({ pdfUrl }: { pdfUrl: string }) {
   const reduceMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (failed) {
+    return (
+      <p className="py-2 font-mono text-xs text-muted">
+        Preview unavailable — the PDF is still available to download below.
+      </p>
+    );
+  }
 
   return (
     <>
