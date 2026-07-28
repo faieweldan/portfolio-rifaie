@@ -145,11 +145,14 @@ export function Telemetry() {
     };
   }, []);
 
+  // A canvas is a replaced element: left/right + top/bottom alone will not
+  // stretch it, so its size must be stated explicitly or it falls back to the
+  // intrinsic 300x150.
   return (
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none absolute -inset-x-5 -inset-y-3.5 [mask-image:radial-gradient(ellipse_78%_82%_at_42%_50%,#000_30%,transparent_78%)]"
+      className="pointer-events-none absolute -left-5 -top-3.5 h-[calc(100%+1.75rem)] w-[calc(100%+2.5rem)] [mask-image:radial-gradient(ellipse_78%_82%_at_42%_50%,#000_30%,transparent_78%)] [-webkit-mask-image:radial-gradient(ellipse_78%_82%_at_42%_50%,#000_30%,transparent_78%)]"
     />
   );
 }
