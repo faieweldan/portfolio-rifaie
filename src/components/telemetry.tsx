@@ -24,6 +24,23 @@ export function Telemetry() {
     let t = 0;
     let raf = 0;
 
+    // Reading a CSS custom property forces a style recalculation, so it is
+    // cached here rather than read on every frame. The theme toggle flips a
+    // class on <html>, which is the only thing that can change it.
+    let accent = "#1e4d3f";
+    function readAccent() {
+      accent =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--accent")
+          .trim() || accent;
+    }
+    readAccent();
+    const themeWatcher = new MutationObserver(readAccent);
+    themeWatcher.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
     function size() {
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
@@ -89,25 +106,40 @@ export function Telemetry() {
         ctx.stroke();
       }
 
-      const accent = getComputedStyle(document.documentElement)
-        .getPropertyValue("--accent")
-        .trim();
-
       ctx.globalAlpha = 0.3;
-      trace(w, h, t, 26, accent || "#1e4d3f", 1.4);
+      trace(w, h, t, 26, accent, 1.4);
       ctx.globalAlpha = 0.18;
       trace(w, h, t * 0.62 + 2.2, 19, "#7d8a85", 1);
       ctx.globalAlpha = 1;
 
-      if (!reduceMotion) {
+      if (!reduceMotion && visible) {
         t += 0.011;
         raf = requestAnimationFrame(draw);
       }
     }
+
+    // Don't burn frames while the intro is scrolled off screen.
+    let visible = true;
+    const visWatcher = new IntersectionObserver(
+      (entries) => {
+        const nowVisible = entries[0]?.isIntersecting ?? true;
+        if (nowVisible && !visible) {
+          visible = true;
+          draw();
+        } else {
+          visible = nowVisible;
+        }
+      },
+      { rootMargin: "120px" }
+    );
+    visWatcher.observe(canvas);
+
     draw();
 
     return () => {
       observer.disconnect();
+      themeWatcher.disconnect();
+      visWatcher.disconnect();
       parent?.removeEventListener("pointermove", onMove);
       cancelAnimationFrame(raf);
     };
