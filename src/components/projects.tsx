@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
-import { supabase } from "@/lib/supabase";
+import { getProjectImageUrl } from "@/lib/supabase";
 
 function GithubIcon() {
   return (
@@ -254,47 +254,17 @@ const projects = [
   },
 ];
 
+
 type Project = (typeof projects)[number];
 
-function useProjectImages() {
-  const [images, setImages] = useState<Record<string, string>>({});
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    async function load() {
-      const { data } = await supabase.storage.from("portfolio").list("projects");
-      const map: Record<string, string> = {};
-      if (data) {
-        for (const file of data) {
-          const { data: urlData } = supabase.storage
-            .from("portfolio")
-            .getPublicUrl(`projects/${file.name}`);
-          map[file.name] = urlData.publicUrl;
-        }
-      }
-      setImages(map);
-      setLoaded(true);
-    }
-    load();
-  }, []);
-
-  return { images, loaded };
-}
-
 export function Projects() {
-  const { images, loaded } = useProjectImages();
-
   return (
     <section id="projects" className="px-8 py-11 sm:px-14">
       <SectionHeading title="Selected projects" note="click to open" />
       <div className="flex flex-col">
         {projects.map((project, i) => (
           <Reveal key={project.title} delay={Math.min(i, 4) * 0.02}>
-            <ProjectRow
-              project={project}
-              imageUrl={images[project.slug]}
-              imagesLoaded={loaded}
-            />
+            <ProjectRow project={project} />
           </Reveal>
         ))}
       </div>
@@ -302,92 +272,96 @@ export function Projects() {
   );
 }
 
-function ProjectRow({
-  project,
-  imageUrl,
-  imagesLoaded,
-}: {
-  project: Project;
-  imageUrl: string | undefined;
-  imagesLoaded: boolean;
-}) {
+function ProjectRow({ project }: { project: Project }) {
   const [open, setOpen] = useState(false);
-  const canExpand = imagesLoaded && Boolean(imageUrl);
+  const [everOpened, setEverOpened] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
   const contentId = `project-${project.slug}`;
+
+  // The URL is derived from the slug rather than listed from storage, so a
+  // missing bucket listing can never hide a project's links.
+  const imageUrl = getProjectImageUrl(project.slug);
+
+  function toggle() {
+    setOpen((v) => !v);
+    setEverOpened(true);
+  }
 
   return (
     <div className="border-b border-border">
-      {canExpand ? (
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls={contentId}
-          onClick={() => setOpen((v) => !v)}
-          className="block w-full py-4 text-left"
-        >
-          <RowHeader project={project} expandable open={open} />
-        </button>
-      ) : (
-        <div className="py-4">
-          <RowHeader project={project} expandable={false} open={false} />
-          {!imagesLoaded && (
-            <div className="mt-3 h-4 w-24 animate-pulse rounded-none bg-border/70" />
-          )}
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={contentId}
+        onClick={toggle}
+        className="block w-full py-4 text-left"
+      >
+        <div className="grid gap-x-10 gap-y-2 sm:grid-cols-[minmax(0,1fr)_minmax(180px,240px)]">
+          <div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-[1.08rem] font-semibold tracking-tight">
+                {project.title}
+              </span>
+              <span className="font-mono text-[0.78em] text-muted">
+                {open ? "–" : "+"}
+              </span>
+            </div>
+            <p className="mt-1 text-[0.94em] text-muted">
+              {project.description}
+            </p>
+          </div>
+
+          {/* Stack in the right-hand column so the wide side of the page
+              carries the metadata instead of sitting empty. */}
+          <ul className="flex flex-col gap-0.5 font-mono text-[0.62rem] leading-relaxed tracking-wide text-muted sm:pt-1">
+            {project.tags.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
         </div>
-      )}
+      </button>
 
       <div
         id={contentId}
+        // Keeps the collapsed links out of the keyboard tab order — they are
+        // invisible, so tabbing into them would strand the focus ring.
+        inert={!open}
         className="overflow-hidden transition-[max-height,opacity,margin] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
         style={
           open
-            ? { maxHeight: 340, opacity: 1, marginBottom: 19 }
+            ? { maxHeight: 560, opacity: 1, marginBottom: 19 }
             : { maxHeight: 0, opacity: 0, marginBottom: 0 }
         }
       >
-        {imageUrl && (
+        {everOpened && !imageFailed && (
           <div className="relative aspect-[16/8] w-full overflow-hidden bg-card">
             <Image
               src={imageUrl}
               alt={`${project.title} screenshot`}
               fill
               unoptimized
+              onError={() => setImageFailed(true)}
               className="object-cover"
-              sizes="(max-width: 640px) 100vw, 700px"
+              sizes="(max-width: 640px) 100vw, 900px"
             />
           </div>
         )}
         <div className="mt-2.5 flex flex-wrap gap-2">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wide text-muted transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-foreground hover:text-foreground"
-          >
+          <ProjectLink href={project.github}>
             <GithubIcon />
             GitHub
-          </a>
+          </ProjectLink>
           {"demo" in project && (
-            <a
-              href={project.demo as string}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wide text-muted transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-foreground hover:text-foreground"
-            >
+            <ProjectLink href={project.demo as string}>
               <ExternalIcon />
               Demo
-            </a>
+            </ProjectLink>
           )}
           {"showcase" in project && (
-            <a
-              href={project.showcase as string}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wide text-muted transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-foreground hover:text-foreground"
-            >
+            <ProjectLink href={project.showcase as string}>
               <ExternalIcon />
               Showcase
-            </a>
+            </ProjectLink>
           )}
         </div>
       </div>
@@ -395,33 +369,21 @@ function ProjectRow({
   );
 }
 
-function RowHeader({
-  project,
-  expandable,
-  open,
+function ProjectLink({
+  href,
+  children,
 }: {
-  project: Project;
-  expandable: boolean;
-  open: boolean;
+  href: string;
+  children: React.ReactNode;
 }) {
   return (
-    <>
-      <div className="flex items-baseline gap-2">
-        <span className="text-[1.08rem] font-semibold tracking-tight">
-          {project.title}
-        </span>
-        {expandable && (
-          <span className="font-mono text-[0.78em] text-muted">
-            {open ? "–" : "+"}
-          </span>
-        )}
-      </div>
-      <p className="mt-1 max-w-[56ch] text-[0.94em] text-muted">
-        {project.description}
-      </p>
-      <p className="mt-2 max-w-[56ch] font-mono text-[0.64rem] tracking-wide text-muted opacity-80">
-        {project.tags.join(" · ")}
-      </p>
-    </>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wide text-muted transition-colors duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-foreground hover:text-foreground"
+    >
+      {children}
+    </a>
   );
 }
