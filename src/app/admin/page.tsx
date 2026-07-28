@@ -104,7 +104,7 @@ export default function AdminPage() {
             )}
             <button
               onClick={verify}
-              className="w-full rounded-xl bg-accent px-4 py-3 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98]"
+              className="w-full rounded-xl bg-accent px-4 py-3 text-sm font-medium text-background transition-all hover:opacity-90 active:scale-[0.98]"
             >
               Continue
             </button>
@@ -162,7 +162,7 @@ export default function AdminPage() {
         <button
           onClick={uploadProjectImage}
           disabled={!projectFile || projectStatus === "uploading"}
-          className="rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
+          className="rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-background transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
         >
           {projectStatus === "uploading" ? "Uploading…" : "Upload Image"}
         </button>
@@ -196,7 +196,7 @@ export default function AdminPage() {
         <button
           onClick={uploadResume}
           disabled={!resumeFile || resumeStatus === "uploading"}
-          className="rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
+          className="rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-background transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
         >
           {resumeStatus === "uploading" ? "Uploading…" : "Upload Resume"}
         </button>
