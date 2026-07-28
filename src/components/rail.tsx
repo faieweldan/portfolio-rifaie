@@ -43,6 +43,9 @@ export function Rail() {
             src="/profile.jpg"
             alt="Rifaie Wildani Bin Nazori"
             fill
+            // Without this the full 2MB original is downloaded and decoded,
+            // even though it is never shown wider than ~250px.
+            sizes="(max-width: 640px) 132px, 250px"
             className="object-cover"
             priority
           />
