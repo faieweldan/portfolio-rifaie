@@ -38,7 +38,9 @@ export function Rail() {
   return (
     <aside className="border-b border-border bg-card sm:border-b-0 sm:border-r" ref={railRef}>
       <div className="flex flex-col gap-5 px-6 py-9 sm:sticky sm:top-0 sm:h-[100dvh] sm:overflow-y-auto">
-        <div className="relative aspect-[4/5] w-full max-w-[132px] overflow-hidden sm:max-w-none">
+        {/* Centred on phones, where the rail becomes a full-width header;
+            flush left again once it is a sidebar. */}
+        <div className="relative mx-auto aspect-[4/5] w-full max-w-[132px] overflow-hidden sm:mx-0 sm:max-w-none">
           <Image
             src="/profile.jpg"
             alt="Rifaie Wildani Bin Nazori"
